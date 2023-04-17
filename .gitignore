@@ -209,3 +209,22 @@ fabric.properties
 
 
 .python_packages
+
+
+node_modules
+coverage
+azurite-testdrive
+.nyc_output
+dist
+typings
+debug.log
+*.vsix
+*.tgz
+__azur*
+*.env
+temp
+**/.DS_Store.DS_Store
+*.pem
+azurite.exe
+.pkg-cache
+release
