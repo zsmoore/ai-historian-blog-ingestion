@@ -12,7 +12,7 @@ NOTION_TOKEN = 'NOTION_TOKEN'
 DATABASE_ID = 'DATABASE_ID'
 
 MODEL = 'gpt-3.5-turbo'
-WORD_COUNT = 100
+WORD_COUNT = 3000
 PROMPT = '''
 Provide me a title for a blog post about something that happened on {0} in the past.
 Then give me SEO tags for the blog post.
