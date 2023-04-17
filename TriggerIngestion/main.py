@@ -27,10 +27,10 @@ DESCRIPTION = "On this day in history"
 
 RETRY_COUNT = 5
 
-CONTENT_NAMES = ['content', 'blog_post', 'post']
-SEO_TAG_NAMES = ['seo_tags', 'tags']
-URL_SLUG_NAMES = ['url_slug', 'slug']
-TITLE_NAMES = ['title', 'blog_post_title']
+CONTENT_NAMES = ['content', 'blog_post', 'post', 'Blog_post', 'blogPost']
+SEO_TAG_NAMES = ['seo_tags', 'tags', 'SEO_tags', 'seoTags']
+URL_SLUG_NAMES = ['url_slug', 'slug', 'URL_slug', 'seoFriendlySlug']
+TITLE_NAMES = ['title', 'blog_post_title', 'Title', 'blogTitle']
 
 CONTENT = 'content'
 SEO_TAGS = 'seo_tags'
@@ -127,7 +127,43 @@ def build_new_page_content(title):
     }
 
 
+def chunk_content(content):
+    split = [content[i: i + 1999] for i in range(0, len(content), 1999)]
+    return map(lambda x: {
+        'object': 'block',
+        'type': 'paragraph',
+        'paragraph': {
+            'text': [
+                {
+                    'text': {
+                        'content': x
+                    }
+                }
+            ]
+        }
+    }, split)
+
+
 def build_page_children(title, content):
+    paragraphs = [
+        {
+            'object': 'block',
+            'type': 'paragraph',
+            'paragraph': {
+                'text': [
+                    {
+                        'text': {
+                            'content': content
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+    # notion limit
+    if len(content) > 2000:
+        paragraphs = chunk_content(content)
+
     return [
         {
             'object': 'block',
@@ -142,19 +178,7 @@ def build_page_children(title, content):
                 ]
             }
         },
-        {
-            'object': 'block',
-            'type': 'paragraph',
-            'paragraph': {
-                'text': [
-                    {
-                        'text': {
-                            'content': content
-                        }
-                    }
-                ]
-            }
-        }
+        *paragraphs
     ]
 
 
