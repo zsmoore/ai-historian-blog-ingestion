@@ -1,5 +1,6 @@
 import os
 import pprint
+import logging
 from datetime import date
 
 import openai
@@ -92,9 +93,9 @@ def try_parse_response(resp):
             CONTENT: blog_content
         }
     except Exception as e:
-        print(e)
-        print('Failed to parse response')
-        pprint.pprint(resp)
+        logging.error(e)
+        logging.error('Failed to parse response')
+        logging.error(resp)
         return None
 
 
@@ -195,6 +196,7 @@ def build_page_properties(tags, slug, date, description):
 
 
 def main():
+    logging.info('starting now')
     load_dotenv()
     openai_api_key = os.getenv(OPENAI_API_KEY)
     openai_organization_id = os.getenv(OPENAI_ORGANIZATION_ID)
@@ -220,6 +222,7 @@ def main():
     update_created_page_properties(notion_client, page_id, build_page_properties(tags, slug,
                                                                                  date.today().isoformat(),
                                                                                  DESCRIPTION))
+    logging.info('finished')
 
 
 if __name__ == '__main__':
