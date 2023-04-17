@@ -30,15 +30,17 @@ RETRY_COUNT = 5
 CONTENT_NAMES = ['content', 'blog_post', 'post']
 SEO_TAG_NAMES = ['seo_tags', 'tags']
 URL_SLUG_NAMES = ['url_slug', 'slug']
-TITLE = 'title'
+TITLE_NAMES = ['title', 'blog_post_title']
 
 CONTENT = 'content'
 SEO_TAGS = 'seo_tags'
 URL_SLUG = 'url_slug'
+TITLE = 'title'
 
 
 def initialize_openai(api_key, organization_id):
     openai.api_key = api_key
+    openai.organization = organization_id
 
 
 def initialize_client(notion_token):
@@ -81,7 +83,7 @@ def try_parse_response(resp):
         blog_content = try_find_content(content, CONTENT_NAMES)
         tags = try_find_content(content, SEO_TAG_NAMES)
         slug = try_find_content(content, URL_SLUG_NAMES)
-        title = content[TITLE]
+        title = try_find_content(content, TITLE_NAMES)
         should_throw = any(x is None for x in [blog_content, tags, slug, title])
         if should_throw:
             raise Exception('Couldn\'t find content')
