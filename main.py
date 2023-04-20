@@ -1,5 +1,6 @@
 import os
 import pprint
+import json
 from datetime import date
 
 import openai
@@ -77,7 +78,7 @@ def try_parse_response(resp):
         if 'Note:' in content:
             content = content.split('Note:')[0]
         # Get a dictionary from the json
-        content = eval(content)
+        content = json.JSONDecoder(strict=False).decode(content)
 
         blog_content = try_find_content(content, CONTENT_NAMES)
         tags = try_find_content(content, SEO_TAG_NAMES)
