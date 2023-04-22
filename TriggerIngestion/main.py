@@ -128,6 +128,7 @@ def build_new_page_content(title):
 
 
 def chunk_content(content):
+    logging.info('chunk triggered')
     split = [content[i: i + 1999] for i in range(0, len(content), 1999)]
     return map(lambda x: {
         'object': 'block',
@@ -233,7 +234,10 @@ def main():
     prompt = PROMPT.format(date.today().strftime('%b %d'), WORD_COUNT)
     resp = get_result_json(prompt)
     if not resp:
+        logging.info('no resp from openai')
         exit(1)
+    else:
+        logging.info('openai success')
 
     title = resp[TITLE]
     tags = resp[SEO_TAGS]
@@ -244,10 +248,12 @@ def main():
     page_resp = create_new_page(notion_client, database_id, build_new_page_content(title),
                                 build_page_children(title, content))
     page_id = page_resp.id
+    logging.info('page created with ID {0}'.format(page_id))
 
     update_created_page_properties(notion_client, page_id, build_page_properties(tags, slug,
                                                                                  date.today().isoformat(),
                                                                                  DESCRIPTION))
+    logging.info('page updated')
     logging.info('finished')
 
 
