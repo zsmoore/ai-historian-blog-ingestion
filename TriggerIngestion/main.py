@@ -85,7 +85,7 @@ def try_parse_response(resp):
         content = json.JSONDecoder(strict=False).decode(content)
 
         blog_content = try_find_content(content, CONTENT_NAMES)
-        tags = try_find_content(content, SEO_TAG_NAMES)
+        tags = map(lambda x: x.replace(',', ''), try_find_content(content, SEO_TAG_NAMES))
         slug = try_find_content(content, URL_SLUG_NAMES)
         title = try_find_content(content, TITLE_NAMES)
         should_throw = any(x is None for x in [blog_content, tags, slug, title])
